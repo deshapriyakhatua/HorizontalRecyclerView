@@ -30,34 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
         //int[] arr = new int[]{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35};
         arr = new ArrayList<>();
-        arr.add(1);
-        arr.add(2);
-        arr.add(3);
-        arr.add(4);
-        arr.add(5);
-        arr.add(6);
-        arr.add(7);
-        arr.add(8);
-        arr.add(9);
-        arr.add(10);
-        arr.add(11);
-        arr.add(12);
-        arr.add(13);
-        arr.add(14);
-        arr.add(15);
-        arr.add(16);
-        arr.add(17);
-        arr.add(18);
-        arr.add(19);
-        arr.add(20);
-        arr.add(21);
-        arr.add(22);
-        arr.add(23);
-        arr.add(24);
-        arr.add(25);
-        arr.add(26);
-        arr.add(27);
-        arr.add(28);
+        for(int i=0; i<30; i++){ arr.add(i); }
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
@@ -117,8 +90,8 @@ public class MainActivity extends AppCompatActivity {
         public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, int direction) {
             // Creating alert box
             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-            builder.setTitle("Delete Task");
-            builder.setMessage("Are You Sure ??");
+            builder.setTitle("Remove Task");
+            builder.setMessage("Are You Sure ?");
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
