@@ -1,17 +1,25 @@
 package com.example.recyclerview2;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
+
+    ArrayList<Integer> arr;
+    CustomAdapter customAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,17 +28,53 @@ public class MainActivity extends AppCompatActivity {
 
         getSupportActionBar().hide();
 
-        int[] arr = new int[]{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35};
+        //int[] arr = new int[]{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35};
+        arr = new ArrayList<>();
+        arr.add(1);
+        arr.add(2);
+        arr.add(3);
+        arr.add(4);
+        arr.add(5);
+        arr.add(6);
+        arr.add(7);
+        arr.add(8);
+        arr.add(9);
+        arr.add(10);
+        arr.add(11);
+        arr.add(12);
+        arr.add(13);
+        arr.add(14);
+        arr.add(15);
+        arr.add(16);
+        arr.add(17);
+        arr.add(18);
+        arr.add(19);
+        arr.add(20);
+        arr.add(21);
+        arr.add(22);
+        arr.add(23);
+        arr.add(24);
+        arr.add(25);
+        arr.add(26);
+        arr.add(27);
+        arr.add(28);
+
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
-        CustomAdapter customAdapter = new CustomAdapter(arr);
+        customAdapter = new CustomAdapter(arr);
         recyclerView.setAdapter(customAdapter);
 
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
+
     }
+
+    //Adapter recycler view
+
     public class CustomAdapter extends RecyclerView.Adapter<CustomViewHolder>{
 
-        int[] arr;
-        public CustomAdapter(int[] arr) {
+        ArrayList<Integer> arr;
+        public CustomAdapter(ArrayList<Integer> arr) {
             this.arr = arr;
         }
 
@@ -43,12 +87,12 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull CustomViewHolder holder, int position) {
-            holder.tv.setText("CARD - "+arr[position]);
+            holder.tv.setText("CARD - "+arr.get(position));
         }
 
         @Override
         public int getItemCount() {
-            return arr.length;
+            return arr.size();
         }
     }
 
@@ -60,4 +104,37 @@ public class MainActivity extends AppCompatActivity {
             tv = itemView.findViewById(R.id.textView);
         }
     }
+
+    // Swipe for remove
+
+    ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0 , ItemTouchHelper.DOWN ) {
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, int direction) {
+            // Creating alert box
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            builder.setTitle("Delete Task");
+            builder.setMessage("Are You Sure ??");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    int position = viewHolder.getAdapterPosition();
+                    arr.remove(position);
+                    customAdapter.notifyItemRemoved(position);
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    customAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
+                }
+            });
+            builder.show();
+        }
+
+    };
 }
